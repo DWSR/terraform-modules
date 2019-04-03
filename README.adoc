@@ -1,0 +1,56 @@
+= Assorted Terraform Module
+
+== Description
+
+This contains contains Terraform modules that help describe my personal infrastructure, whether
+that's here on GitLab or elsewhere. The modules are generally designed for use with
+link:https://github.com/gruntwork-io/terragrunt[Terragrunt] and are generally leveraged in my
+link:https://gitlab.com/dwsr/terraform-live[terraform-live repo]. Some modules may be published
+elsewhere, such as on the Terraform module registry.
+
+== Motivation
+
+== Repo Information
+
+=== Layout
+
+----
+.
+├── Makefile                          # The magic
+├── README.adoc                       # This file!
+├── gitlab                            # The primary terraform provider in the module
+│   └── gitlab-repos                  # The module folder. Should be descriptive and unique.
+│       ├── README.md                 # All modules must contain a README.md (not .adoc)
+│       ├── backend.tf                # Contains the backend config
+│       ├── main.tf                   # Contains the main module config
+│       ├── outputs.tf                # Contains TF outputs
+│       ├── providers.tf              # Contains explicit provider declarations
+│       └── variables.tf              # Contains variable declarations
+└── scripts                           # Helper scripts
+    ├── gen_docs.py
+    └── mod_dirs.py                   # Module for scripts
+----
+
+=== Notes
+
+* Modules with multiple providers should generally be placed in the folder of the provider with the
+  majority of the resources.
+* Backends are explicitly defined due to https://github.com/gruntwork-io/terragrunt[terragrunt].
+  They don't conflict with vanilla Terraform usage.
+* Markdown is used for module documentation instead of AsciiDoc due to
+  link:https://github.com/segmentio/terraform-docs[terraform-docs].
+
+== Usage
+
+=== Requirements
+
+* https://python.org[Python] >=3.6 (must be available on `PATH`)
+* https://www.gnu.org/software/make/[GNU Make]
+* https://docker.com/[Docker]
+
+Currently, some commands are run in Docker containers. Eventually, all non-Terragrunt commands should be.
+
+=== Instructions
+
+1. Run `make install-hooks` to install the Git commit hooks to ensure code is properly formatted
+   and linted.
