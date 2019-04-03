@@ -2,8 +2,14 @@
 
 ## Description
 
-This module represents a GitLab repo used for my personal projects. It configures some
-opinionated settings for repos (such as only allowing Rebase Merges).
+This module represents a GitLab repo used for my personal projects. It configures some opinionated
+settings for repos (such as only allowing Rebase Merges). It also creates a GitHub repository that
+will act as a push mirror for the GitLab project. The repository is created (and updated) via an
+included Python3 script as the GitHub provider for Terraform does not support personal
+repositories.
+
+Currently, there is no API for creating push mirrors in GitLab. See
+[this issue](https://gitlab.com/gitlab-org/gitlab-ce/issues/58580) for more details.
 
 ## Inputs
 
