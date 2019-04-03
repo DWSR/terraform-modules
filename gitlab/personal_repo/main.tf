@@ -15,3 +15,17 @@ resource "gitlab_project" "proj" {
   only_allow_merge_if_pipeline_succeeds            = true
   only_allow_merge_if_all_discussions_are_resolved = true
 }
+
+resource "null_resource" "github_repo" {
+  triggers {
+    name             = "${var.name}"
+    description      = "${var.description}"
+    visibility_level = "${var.visibility_level}"
+    gitlab_proj      = "${gitlab_project.proj.id}"
+  }
+
+  provisioner "local-exec" {
+    command     = "python3 ./create_github_repo.py ${var.name} ${gitlab_project.proj.web_url} --description '${var.description}' ${var.visibility_level == "private" ? "--private" : "" }"
+    working_dir = "${path.module}"
+  }
+}
