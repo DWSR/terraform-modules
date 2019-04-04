@@ -8,10 +8,10 @@ resource "gitlab_project" "proj" {
   # Opinionation
   default_branch                                   = "master"
   merge_requests_enabled                           = true
-  approvals_before_merge                           = true
+  approvals_before_merge                           = 1
   wiki_enabled                                     = false
   snippets_enabled                                 = true
-  merge_method                                     = "rebase_merge"
+  merge_method                                     = "ff"
   only_allow_merge_if_pipeline_succeeds            = true
   only_allow_merge_if_all_discussions_are_resolved = true
 }
