@@ -1,23 +1,16 @@
 #!/usr/bin/env python3
 import mod_dirs
 from multiprocessing import Pool
-from subprocess import run
-from os import path
+
+TERRAFORM_VERSION = "0.11.13"
 
 
 def lint_tf_files(mod_dir):
-    tf_lint_command = [
-        "docker",
-        "run",
-        "--rm",
-        "-v" "{0}:/tf-mod".format(mod_dir),
-        "hashicorp/terraform:0.11.11",
-        "fmt",
-        "-list=false",
-        "/tf-mod",
-    ]
     print("[LINT] {0}".format(mod_dir))
-    run(tf_lint_command)
+    mod_dirs.run_oneshot_container(
+      "hashicorp/terraform:{0}".format(TERRAFORM_VERSION),
+      "fmt -list=false /tf-mod"
+    )
 
 
 if __name__ == "__main__":

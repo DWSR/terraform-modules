@@ -1,26 +1,21 @@
 #!/usr/bin/env python3
 import mod_dirs
 from multiprocessing import Pool
-from subprocess import check_output
 import re
+
+TERRAFORM_DOCS_VERSION = "0.5.0"
 
 
 def update_tf_module_docs(mod_dir):
-    # run terraform-docs in docker. Invoke the Docker binary to avoid
-    # external dependencies
-    tf_docs_command = [
-        "docker",
-        "run",
-        "--rm",
-        "-v",
-        "{0}:/tf-mod".format(mod_dir),
-        "tmknom/terraform-docs:0.5.0",
-        "md",
-        "/tf-mod",
-    ]
     print("[DOCS] {0}".format(mod_dir))
     # Generate the new input and output tables for this module.
-    docs = check_output(tf_docs_command)
+    # run terraform-docs in docker. Invoke the Docker binary to avoid
+    # external dependencies
+    docs = mod_dirs.run_oneshot_container(
+        "tmknom/terraform-docs:{0}".format(TERRAFORM_DOCS_VERSION),
+        "md /tf-mod",
+        mod_dir,
+    )
     with open("{0}/README.md".format(mod_dir), "r+") as f:
         # Use readlines instead of read so that we can intelligently truncate
         # for modules that have inputs, inputs and outputs, or only outputs.
